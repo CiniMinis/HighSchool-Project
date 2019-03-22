@@ -1,0 +1,17 @@
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\WhiteBloodCell.exe.config
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\WhiteBloodCell.exe
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\WhiteBloodCell.pdb
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\obj\Debug\WhiteBloodCell.csprojAssemblyReference.cache
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\obj\Debug\WhiteBloodCell.Properties.Resources.resources
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\obj\Debug\WhiteBloodCell.csproj.GenerateResource.cache
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\obj\Debug\WhiteBloodCell.csproj.CoreCompileInputs.cache
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\obj\Debug\WhiteBloodCell.exe
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\obj\Debug\WhiteBloodCell.pdb
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\obj\Debug\WhiteBloodCell.AVform.resources
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\PdfSharp.Charting.dll
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\PdfSharp.dll
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\PdfSharp.xml
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\PdfSharp.Charting.xml
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\de\PdfSharp.resources.dll
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\bin\Debug\de\PdfSharp.Charting.resources.dll
+C:\Users\jhjht\source\repos\WhiteBloodCell\WhiteBloodCell\obj\Debug\WhiteBloodCell.csproj.CopyComplete
