@@ -1,4 +1,5 @@
 ﻿using PdfSharp.Pdf;
+using PdfSharp.Pdf.Actions;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.IO;
 using System;
@@ -18,11 +19,16 @@ namespace WhiteBloodCell
 {
     public partial class AVform : Form
     {
+        // represents the current page
         enum Page {Home, FileScan, DirScan, Monitor };
         Page curPage = Page.Home;
-        SoundPlayer click = new SoundPlayer("C:\\Users\\jhjht\\Documents\\Audacity\\click.wav");
+        //blacklist for viruses
         private static string[] openActionBlacklist = {@"\.saveAs\\\((?<str>['""])([A-Z]:[a-z0-9 A-Z/\\]+)\.hta(\k<str>)\\\)"};
         private static List<FileSystemWatcher> watchers = new List<FileSystemWatcher>();
+
+        public const int REMOVE_ID = 0;
+        public const int SUSPICIOUS_ID = 1;
+        public const int NOTIFY_ID = 2;
 
         public AVform()
         {
@@ -30,24 +36,37 @@ namespace WhiteBloodCell
         }
 
 
-        private static bool ScanFile(string path)
-        {
+        private bool ScanFile(string path)
+        {// operation for scanning a file
             if (Path.GetExtension(path) == ".pdf")
             {
                 try
                 {
                     PdfDocument file = PdfReader.Open(path);
-                    PdfReference openAction = (PdfReference)file.Internals.Catalog.Elements["/OpenAction"];
-                    if (openAction == null) return false;
-                    PdfDictionary action = (PdfDictionary)openAction.Value;
+                    PdfReference nextReference = (PdfReference)file.Internals.Catalog.Elements["/OpenAction"];
+                    if (nextReference == null) return false;
+                    PdfDictionary action = (PdfDictionary)nextReference.Value;
                     if (action == null) return false;
-                    foreach (string pattern in openActionBlacklist)
+                    do
                     {
-                        if (Regex.Match(action.ToString(), pattern).Success)
+                        foreach (string pattern in openActionBlacklist)
                         {
-                            return true;
+                            if (SettingsBox.GetItemChecked(SUSPICIOUS_ID) ||
+                                Regex.Match(action.ToString(), pattern).Success)
+                            {
+                                if (SettingsBox.GetItemChecked(REMOVE_ID))
+                                {
+                                    File.Delete(path);
+                                }
+                                return true;
+                            }
                         }
-                    }
+                    }   // a joke line which basicly iterates over the linked list of open actions
+                    while ((nextReference = (PdfReference)action.Elements["/Next"]) == null || (action = (PdfDictionary)nextReference.Value) == null);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    MessageBox.Show(String.Format("couldn't handle {0}. Try to rerun as administrator.", path));
                 }
                 catch (Exception)
                 {
@@ -56,8 +75,8 @@ namespace WhiteBloodCell
             }
             return false;
         }
-        private static void ScanDir(string path)
-        {
+        private void ScanDir(string path)
+        {   // uses the file scan to scan all files in a directory and its sub-directories
             List<string> viruses = new List<string>();
             foreach (string file in Directory.GetFiles(path, "*.pdf", SearchOption.AllDirectories))
             {
@@ -75,12 +94,15 @@ namespace WhiteBloodCell
                 MessageBox.Show(String.Format("{0} viruses found!", viruses.Count));
                 foreach (string virus in viruses)
                 {
-                    MessageBox.Show(virus);
+                    if (SettingsBox.GetItemChecked(NOTIFY_ID))
+                    {
+                        MessageBox.Show(virus);
+                    }
                 }
             }
         }
-        private static void MonitorDir(string path)
-        {
+        private void MonitorDir(string path)
+        {   // creates a file system watcher which monitors infections in a given directory
             FileSystemWatcher watcher = new FileSystemWatcher
             {
                 Path = path,
@@ -90,34 +112,34 @@ namespace WhiteBloodCell
                 Filter = "*.pdf"
             };
             watcher.IncludeSubdirectories = true;
-            watcher.Changed += MonitorCheck;
+            watcher.Changed += this.MonitorCheck;
             // start watching
             MessageBox.Show("Monitor Started");
             watcher.EnableRaisingEvents = true;
             watchers.Add(watcher);
         }
 
-        private static void MonitorCheck(object src, FileSystemEventArgs e)
+        private void MonitorCheck(object src, FileSystemEventArgs e)
         {
             if (ScanFile(e.FullPath))
-                {
-                    MessageBox.Show(String.Format("Monitor found virus: {0}", e.FullPath));
-                }
+            {
+                MessageBox.Show(String.Format("Monitor found virus: {0}", e.FullPath));
+            }
         }
 
-private void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
         }
 
         private void Exit_Click(object sender, EventArgs e)
-        {
-            click.Play();
+        {   // handles the exit button
+            //click.Play();
             System.Threading.Thread.Sleep(300);
             Application.Exit();
         }
 
         private void ScanBtn_Click(object sender, EventArgs e)
-        {
+        {   // parses a click on the main button
             switch (curPage)
             {
                 case Page.FileScan:
@@ -143,8 +165,8 @@ private void Form1_Load(object sender, EventArgs e)
         }
 
         private void FileScan_Click(object sender, EventArgs e)
-        {
-            click.Play();
+        {   // changes the page to the filescan page
+            //click.Play();
             if (curPage == Page.Home)
             {
                 Home_Hide();
@@ -158,8 +180,8 @@ private void Form1_Load(object sender, EventArgs e)
         }
 
         private void DirScan_Click(object sender, EventArgs e)
-        {
-            click.Play();
+        {   // changes the page to the directory scan page
+            //click.Play();
             if (curPage == Page.Home)
             {
                 Home_Hide();
@@ -173,8 +195,8 @@ private void Form1_Load(object sender, EventArgs e)
         }
 
         private void DirMonitor_Click(object sender, EventArgs e)
-        {
-            click.Play();
+        {   // changes the page to the monitor page
+            //click.Play();
             if (curPage == Page.Home)
             {
                 Home_Hide();
@@ -188,7 +210,7 @@ private void Form1_Load(object sender, EventArgs e)
         }
 
         private void PathBtn_Click(object sender, EventArgs e)
-        {
+        {   // handles the file/directory selection button
             switch (curPage)
             {
                 case Page.DirScan:
@@ -206,7 +228,7 @@ private void Form1_Load(object sender, EventArgs e)
         }
 
         private void SelectFolder()
-        {
+        {   // selects a folder
             using (var fldrDlg = new FolderBrowserDialog())
             {
                 if (fldrDlg.ShowDialog() == DialogResult.OK)
@@ -217,7 +239,7 @@ private void Form1_Load(object sender, EventArgs e)
         }
 
         private void SelectFile()
-        {
+        {   // selects a file
             using (var fileDlg = new OpenFileDialog())
             {
                 fileDlg.Filter = "PDF only|*.pdf";
@@ -234,8 +256,8 @@ private void Form1_Load(object sender, EventArgs e)
         }
 
         private void Home_Click(object sender, EventArgs e)
-        {
-            click.Play();
+        {   // changes the page to the home page
+            //click.Play();
             Home_Show();
             curPage = Page.Home;
             PathField.Text = "";
@@ -246,21 +268,39 @@ private void Form1_Load(object sender, EventArgs e)
         }
 
         private void Home_Show()
-        {
+        {   // changes the displayed items to fit the home screen
+            PathTxt.Hide();
+            PathField.Hide();
+            ScanBtn.Hide();
+            PathBtn.Hide();
             HomeContent.Show();
-            HomeLocal.Show();
-            HomeOnline.Show();
             HomePanel.Show();
+            SettingsBox.Show();
+            SettingsTitle.Show();
         }
         private void Home_Hide()
-        {
+        {   // changes the displayed items to fit non-home screens
+            PathTxt.Show();
+            PathField.Show();
+            ScanBtn.Show();
+            PathBtn.Show();
             HomeContent.Hide();
-            HomeLocal.Hide();
-            HomeOnline.Hide();
             HomePanel.Hide();
+            SettingsBox.Hide();
+            SettingsTitle.Hide();
         }
 
         private void HomeContent_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void InfoContent_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PathTxt_Click(object sender, EventArgs e)
         {
 
         }

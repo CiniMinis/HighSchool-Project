@@ -44,12 +44,12 @@
             this.ScanBtn = new System.Windows.Forms.Button();
             this.PageTxt = new System.Windows.Forms.Label();
             this.HomeContent = new System.Windows.Forms.RichTextBox();
-            this.HomeOnline = new System.Windows.Forms.Button();
             this.HomePanel = new System.Windows.Forms.Panel();
             this.PathBtn = new System.Windows.Forms.Button();
             this.PathField = new System.Windows.Forms.TextBox();
             this.PathTxt = new System.Windows.Forms.Label();
-            this.HomeLocal = new System.Windows.Forms.Button();
+            this.SettingsTitle = new System.Windows.Forms.Label();
+            this.SettingsBox = new System.Windows.Forms.CheckedListBox();
             this.SidePanel.SuspendLayout();
             this.NamePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconPic)).BeginInit();
@@ -207,6 +207,7 @@
             this.InfoContent.Size = new System.Drawing.Size(780, 115);
             this.InfoContent.TabIndex = 1;
             this.InfoContent.Text = resources.GetString("InfoContent.Text");
+            this.InfoContent.TextChanged += new System.EventHandler(this.InfoContent_TextChanged);
             // 
             // InfoTitle
             // 
@@ -235,6 +236,7 @@
             this.ScanBtn.TabIndex = 5;
             this.ScanBtn.Text = "Download";
             this.ScanBtn.UseVisualStyleBackColor = false;
+            this.ScanBtn.Visible = false;
             this.ScanBtn.Click += new System.EventHandler(this.ScanBtn_Click);
             // 
             // PageTxt
@@ -266,23 +268,11 @@
     "viruses.";
             this.HomeContent.TextChanged += new System.EventHandler(this.HomeContent_TextChanged);
             // 
-            // HomeOnline
-            // 
-            this.HomeOnline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.HomeOnline.Font = new System.Drawing.Font("Franklin Gothic Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HomeOnline.Location = new System.Drawing.Point(616, 174);
-            this.HomeOnline.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.HomeOnline.Name = "HomeOnline";
-            this.HomeOnline.Size = new System.Drawing.Size(162, 46);
-            this.HomeOnline.TabIndex = 10;
-            this.HomeOnline.Text = "Use Online";
-            this.HomeOnline.UseVisualStyleBackColor = true;
-            // 
             // HomePanel
             // 
             this.HomePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.HomePanel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.HomePanel.Location = new System.Drawing.Point(250, 229);
+            this.HomePanel.Location = new System.Drawing.Point(250, 149);
             this.HomePanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.HomePanel.Name = "HomePanel";
             this.HomePanel.Size = new System.Drawing.Size(782, 5);
@@ -299,6 +289,7 @@
             this.PathBtn.TabIndex = 4;
             this.PathBtn.Text = "Browse";
             this.PathBtn.UseVisualStyleBackColor = true;
+            this.PathBtn.Visible = false;
             this.PathBtn.Click += new System.EventHandler(this.PathBtn_Click);
             // 
             // PathField
@@ -312,6 +303,7 @@
             this.PathField.ReadOnly = true;
             this.PathField.Size = new System.Drawing.Size(402, 33);
             this.PathField.TabIndex = 2;
+            this.PathField.Visible = false;
             this.PathField.TextChanged += new System.EventHandler(this.Path_TextChanged);
             // 
             // PathTxt
@@ -324,18 +316,38 @@
             this.PathTxt.Size = new System.Drawing.Size(164, 30);
             this.PathTxt.TabIndex = 7;
             this.PathTxt.Text = "Select a folder";
+            this.PathTxt.Visible = false;
+            this.PathTxt.Click += new System.EventHandler(this.PathTxt_Click);
             // 
-            // HomeLocal
+            // SettingsTitle
             // 
-            this.HomeLocal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.HomeLocal.Font = new System.Drawing.Font("Franklin Gothic Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HomeLocal.Location = new System.Drawing.Point(446, 174);
-            this.HomeLocal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.HomeLocal.Name = "HomeLocal";
-            this.HomeLocal.Size = new System.Drawing.Size(162, 46);
-            this.HomeLocal.TabIndex = 9;
-            this.HomeLocal.Text = "Use Local";
-            this.HomeLocal.UseVisualStyleBackColor = true;
+            this.SettingsTitle.AutoSize = true;
+            this.SettingsTitle.Font = new System.Drawing.Font("Franklin Gothic Medium", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsTitle.Location = new System.Drawing.Point(258, 160);
+            this.SettingsTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.SettingsTitle.Name = "SettingsTitle";
+            this.SettingsTitle.Padding = new System.Windows.Forms.Padding(255, 0, 255, 0);
+            this.SettingsTitle.Size = new System.Drawing.Size(674, 42);
+            this.SettingsTitle.TabIndex = 12;
+            this.SettingsTitle.Text = "Settings:";
+            // 
+            // SettingsBox
+            // 
+            this.SettingsBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.SettingsBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.SettingsBox.CheckOnClick = true;
+            this.SettingsBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.SettingsBox.Font = new System.Drawing.Font("Franklin Gothic Medium", 12F);
+            this.SettingsBox.FormattingEnabled = true;
+            this.SettingsBox.Items.AddRange(new object[] {
+            "Remove files without asking me",
+            "Target suspicious PDF files",
+            "Notify me for all detections"});
+            this.SettingsBox.Location = new System.Drawing.Point(250, 243);
+            this.SettingsBox.Margin = new System.Windows.Forms.Padding(10);
+            this.SettingsBox.Name = "SettingsBox";
+            this.SettingsBox.Size = new System.Drawing.Size(780, 180);
+            this.SettingsBox.TabIndex = 13;
             // 
             // AVform
             // 
@@ -343,9 +355,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.ClientSize = new System.Drawing.Size(1030, 575);
+            this.Controls.Add(this.SettingsBox);
+            this.Controls.Add(this.SettingsTitle);
             this.Controls.Add(this.HomePanel);
-            this.Controls.Add(this.HomeOnline);
-            this.Controls.Add(this.HomeLocal);
             this.Controls.Add(this.HomeContent);
             this.Controls.Add(this.PathTxt);
             this.Controls.Add(this.PageTxt);
@@ -388,12 +400,12 @@
         private System.Windows.Forms.Label PageTxt;
         private System.Windows.Forms.PictureBox IconPic;
         private System.Windows.Forms.RichTextBox HomeContent;
-        private System.Windows.Forms.Button HomeOnline;
         private System.Windows.Forms.Panel HomePanel;
         private System.Windows.Forms.Button PathBtn;
         private System.Windows.Forms.TextBox PathField;
         private System.Windows.Forms.Label PathTxt;
-        private System.Windows.Forms.Button HomeLocal;
+        private System.Windows.Forms.Label SettingsTitle;
+        private System.Windows.Forms.CheckedListBox SettingsBox;
     }
 }
 

